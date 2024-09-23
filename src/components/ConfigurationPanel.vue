@@ -36,6 +36,7 @@
                     dense
                     v-model="companies.selectedValue"
                     @change="changeCompany"
+
                 ></v-select>
                 <v-select
                     :items="algorithm.values"
@@ -47,20 +48,27 @@
               </v-col>
             </v-row>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-card>
+        <v-col cols="12" md="3">
+          <v-card class="plot">
             <ScatterPlot :key="scatterPlotId"
                          :selectedCategory="categories.selectedValue"
                          @changeCurrentlySelectedCompany="changeCurrentlySelectedCompany"
             />
           </v-card>
         </v-col>
-        <v-col cols="12" md="5">
-          <v-card>
+        <v-col cols="12" md="4">
+          <v-card class="plot">
             <LinePlot :key="linePlotId"
                       :selectedCompany="companies.selectedValue"
                       :selectedAlgorithm="algorithm.selectedValue"/>
-
+          </v-card>
+        </v-col>
+        <v-col cols="12" md="3">
+          <v-card class="plot">
+            <LineBarPlot :key="lineBarPlotId"
+                         :selectedCategory="categories.selectedValue"
+                         :selectedCompany="companies.selectedValue"
+            />
           </v-card>
         </v-col>
       </v-row>
@@ -72,11 +80,13 @@
 <script>
 import ScatterPlot from './ScatterPlot';
 import LinePlot from './LinePlot';
+import LineBarPlot from './LineBarPlot';
 export default {
-  components: {ScatterPlot, LinePlot},
+  components: {ScatterPlot, LinePlot, LineBarPlot},
   data: () => ({
     scatterPlotId: 0,
     linePlotId: 0,
+    lineBarPlotId:0,
     categories: {
       values: ['All', 'tech', 'health', 'bank'],
       selectedValue: 'All'
@@ -111,6 +121,7 @@ export default {
   },
     changeCompany() {
       this.linePlotId += 1
+      this.lineBarPlotId += 1
     },
     changeAlgorithm() {
       this.linePlotId += 1
@@ -139,6 +150,12 @@ export default {
   padding-left: 17px;
   height: calc(100vh - 50px);
   background: linear-gradient(to bottom, #ffffff, #6c6fbe);
+
 }
+.plot{
+  height: calc(100vh - 50px);
+
+}
+
 
 </style>

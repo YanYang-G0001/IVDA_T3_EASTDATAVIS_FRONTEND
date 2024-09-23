@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row align="center" justify="center" class="mt-1 mb-0">
-      <h3>Profit View of Company: {{ $props.selectedCompany }}</h3>
+      <h3>Profit View of Company: {{ companyName}}</h3>
     </v-row>
     <div style="height: 90vh">
       <div id='myLinePlot' style="height: inherit"></div>
@@ -17,7 +17,8 @@ export default {
   props: ["selectedCompany", "selectedAlgorithm"],
   data: () => ({
     LinePlotData: {x: [], y: []},
-    LinePlotData_pre: {x_pre: [], y_pre: []}
+    LinePlotData_pre: {x_pre: [], y_pre: []},
+    companyName:''
   }),
   mounted() {
     this.fetchData()
@@ -25,7 +26,6 @@ export default {
   methods: {
  async fetchData() {
    try{
-
      // req URL to retrieve single company from backend
       var reqUrl = 'http://127.0.0.1:5000/companies/' + this.$props.selectedCompany +
           '?algorithm=' + this.$props.selectedAlgorithm
@@ -35,6 +35,7 @@ export default {
       // await response and data
       const response = await fetch(reqUrl)
       const responseData = await response.json();
+      this.companyName = responseData.name //extract company name to display in title
       // transform data to usable by lineplot
       responseData.profit.forEach((profit) => {
         if (profit.year<=2021) {
