@@ -30,6 +30,8 @@
               <v-col cols="12" sm="12">
                 <v-select
                     :items="companies.values"
+                    item-title="name"
+                    item-value="id"
                     label="Select a company"
                     dense
                     v-model="companies.selectedValue"
@@ -79,9 +81,24 @@ export default {
       values: ['All', 'tech', 'health', 'bank'],
       selectedValue: 'All'
     },
+
     companies: {
-      values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-      selectedValue: 1
+      values: [{id: 1, name: "alphabet"},
+        {id: 2, name: "apple"},
+        {id: 3, name: "amazon"},
+        {id: 4, name: "microsoft"},
+        {id: 5, name: "meta"},
+        {id: 6, name: "united health"},
+        {id: 7, name: "johnson and johnson"},
+        {id: 8, name: "pfizer"},
+        {id: 9, name: "cvs health"},
+        {id: 10, name: "mckesson"},
+        {id: 11, name: "ubs"},
+        {id: 12, name: "credit suisse"},
+        {id: 13, name: "jp morgan"},
+        {id: 14, name: "goldman sachs"},
+        {id: 15, name: "bank of america"}],
+      selectedValue: 1 //default value
     },
     algorithm: {
       values: ['none', 'random', 'regression'],

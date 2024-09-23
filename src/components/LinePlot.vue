@@ -16,24 +16,36 @@ export default {
   // defined in parent component, no need to import, already be rendered in the template
   props: ["selectedCompany", "selectedAlgorithm"],
   data: () => ({
-    LinePlotData: {x: [], y: []}
+    LinePlotData: {x: [], y: []},
+    LinePlotData_pre: {x_pre: [], y_pre: []}
   }),
   mounted() {
     this.fetchData()
   },
   methods: {
-    async fetchData() {
-      // req URL to retrieve single company from backend
+ async fetchData() {
+   try{
+
+     // req URL to retrieve single company from backend
       var reqUrl = 'http://127.0.0.1:5000/companies/' + this.$props.selectedCompany +
           '?algorithm=' + this.$props.selectedAlgorithm
-      console.log("ReqURL " + reqUrl)
+      console.log("ReqURL " + reqUrl)}
+   catch(error){ console.error('Error fetching companies:' );
+   }
       // await response and data
       const response = await fetch(reqUrl)
       const responseData = await response.json();
       // transform data to usable by lineplot
       responseData.profit.forEach((profit) => {
+        if (profit.year<=2021) {
           this.LinePlotData.x.push(profit.year)
           this.LinePlotData.y.push(profit.value)
+        }//line connects 2021 and 2022 is predicted
+        if (profit.year>=2021) {
+          this.LinePlotData_pre.x_pre.push(profit.year)
+          this.LinePlotData_pre.y_pre.push(profit.value)
+        }
+
       })
       // draw the lineplot after the data is transformed
       this.drawLinePlot()
@@ -42,12 +54,25 @@ export default {
       var trace1 = {
         x: this.LinePlotData.x,
         y: this.LinePlotData.y,
-        type: 'scatter'
+        type: 'scatter',
+        mode: 'lines+markers',
+        name: 'actual profit',
+        line: {color:'black'}
       };
-      var data = [trace1];
+      var trace2 = {
+        x: this.LinePlotData_pre.x_pre,
+        y: this.LinePlotData_pre.y_pre,
+        type: 'scatter',
+        mode: 'lines+markers',
+        name: 'predict profit',
+        line: {color:'red', dash: 'dash'}
+      };
+      //pay attention to the plot order/layer
+      var data = [trace2,trace1];
       var layout = {
         xaxis:{title: "Year"},
         yaxis:{title: "Profit"}
+
       };
       var config = {responsive: true, displayModeBar: false}
       Plotly.newPlot('myLinePlot', data, layout, config);
@@ -58,12 +83,16 @@ export default {
     selectedCompany() {
       this.LinePlotData.x = [];
       this.LinePlotData.y = [];
+      this.LinePlotData_pre.x_pre = [];
+      this.LinePlotData_pre.y_pre = [];
 
       this.fetchData();
     },
     selectedAlgorithm() {
       this.LinePlotData.x = [];
       this.LinePlotData.y = [];
+      this.LinePlotData_pre.x_pre = [];
+      this.LinePlotData_pre.y_pre = [];
 
       this.fetchData();
     }
