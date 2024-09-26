@@ -45,32 +45,37 @@
                     v-model="algorithm.selectedValue"
                     @change="changeAlgorithm"
                 ></v-select>
+                <div>
+                  <PoemLLM :selectedCompany="companies.selectedValue" />
+                </div>
               </v-col>
             </v-row>
         </v-col>
         <v-col cols="12" md="3">
-          <v-card class="plot">
+          <v-card >
             <ScatterPlot :key="scatterPlotId"
                          :selectedCategory="categories.selectedValue"
                          @changeCurrentlySelectedCompany="changeCurrentlySelectedCompany"
             />
           </v-card>
+
         </v-col>
         <v-col cols="12" md="4">
-          <v-card class="plot">
-            <LinePlot :key="linePlotId"
-                      :selectedCompany="companies.selectedValue"
-                      :selectedAlgorithm="algorithm.selectedValue"/>
-          </v-card>
-        </v-col>
-        <v-col cols="12" md="3">
-          <v-card class="plot">
+          <v-card >
             <LineBarPlot :key="lineBarPlotId"
                          :selectedCategory="categories.selectedValue"
                          :selectedCompany="companies.selectedValue"
             />
           </v-card>
         </v-col>
+        <v-col cols="12" md="3">
+          <v-card>
+            <LinePlot :key="linePlotId"
+                      :selectedCompany="companies.selectedValue"
+                      :selectedAlgorithm="algorithm.selectedValue"/>
+          </v-card>
+        </v-col>
+
       </v-row>
     </v-container>
   </div>
@@ -81,8 +86,9 @@
 import ScatterPlot from './ScatterPlot';
 import LinePlot from './LinePlot';
 import LineBarPlot from './LineBarPlot';
+import PoemLLM from "./Poem.vue";
 export default {
-  components: {ScatterPlot, LinePlot, LineBarPlot},
+  components: {ScatterPlot, LinePlot, LineBarPlot,PoemLLM},
   data: () => ({
     scatterPlotId: 0,
     linePlotId: 0,
@@ -152,10 +158,7 @@ export default {
   background: linear-gradient(to bottom, #ffffff, #6c6fbe);
 
 }
-.plot{
-  height: calc(100vh - 50px);
 
-}
 
 
 </style>

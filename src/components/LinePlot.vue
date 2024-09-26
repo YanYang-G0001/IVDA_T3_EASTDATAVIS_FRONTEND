@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row align="center" justify="center" class="mt-1 mb-0">
-      <h3>Profit View of Company: {{ companyName}}</h3>
+      <h3>Profit View of Company: {{companyName}}</h3>
     </v-row>
     <div style="height: 90vh">
       <div id='myLinePlot' style="height: inherit"></div>

@@ -1,8 +1,12 @@
 <template>
   <div>
     <v-row align="center" justify="center" class="mt-1 mb-0">
+      <div>
       <h3>Employee# of {{ $props.selectedCategory }} Companies</h3>
+      <p class="subtitle">Selected company is highlighted</p>
+      </div>
     </v-row>
+
     <div style="height: 90vh">
       <div id='myLineBarPlot' style="height: inherit"></div>
     </div>
@@ -14,11 +18,9 @@ import Plotly from 'plotly.js/dist/plotly';
 export default {
   name: "LineBarPlot",
   // defined in parent component, no need to import, already be rendered in the template
-  props: ["selectedCategory"],
+  props: ["selectedCategory","selectedCompany"],
   data: () => ({
-    LineBarPlotData: {x: [], y: [],category:[]},
-    //LineBarPlotData_pre: {x_pre: [], y_pre: []},
-    companyName:''
+    LineBarPlotData: {x: [], y: [],category:[],companyId:[]}
   }),
   mounted() {
     this.fetchData()
@@ -39,20 +41,25 @@ export default {
       responseData.forEach((company) => {
         this.LineBarPlotData.x.push(company.name)
         this.LineBarPlotData.y.push(company.employees)
-        this.LineBarPlotData.category.push(company.category) //encode color
+        this.LineBarPlotData.category.push(company.category)
+        this.LineBarPlotData.companyId.push(company.id)//encode color
       })
       // draw the lineplot after the data is transformed
       this.drawLineBarPlot()
     },
     drawLineBarPlot() {
+      const selectedCompanyId = this.$props.selectedCompany;
+      const colors = this.LineBarPlotData.companyId.map(id =>
+          id === selectedCompanyId ? '#3777ee' : 'grey'
+      );
       var trace1 = {
         x: this.LineBarPlotData.x,
         y: this.LineBarPlotData.y,
         type: 'bar',
         text: this.LineBarPlotData.y.map(String),
         textposition: 'auto',
-        hoverinfo: 'none'
-
+        hoverinfo: 'none',
+        marker:{color:colors}
       };
       //pay attention to the plot order/layer
       var data = [trace1];
@@ -73,7 +80,12 @@ export default {
       this.LineBarPlotData.y = [];
 
       this.fetchData();
-    }
+    },
+    selectedCompany() {
+      this.LineBarPlotData.x = [];
+      this.LineBarPlotData.y = [];
+      this.fetchData();
+    },
   }
 }
 </script>
