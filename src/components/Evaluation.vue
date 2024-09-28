@@ -3,13 +3,13 @@
     <v-container fluid>
       <v-row>
         <div style="font-style: italic; text-transform: uppercase">
-            keyword: {{this.company_name}}
+        keyword: {{this.company_name}}, {{this.category}} industry
         </div>
-          <div style="height: 100%">
-            <div id='myPoem' style="height: inherit">
-              {{ poem }}
-            </div>
+        <div style="height: 100%">
+          <div id='myEvaluation' style="height: inherit">
+            {{ evaluation }}
           </div>
+        </div>
       </v-row>
     </v-container>
   </div>
@@ -20,24 +20,24 @@
 import axios from 'axios';
 
 export default {
-  name: "PoemLLM",
+  name: "EvaluationLLM",
   // defined in parent component, no need to import, already be rendered in the template
   props: ["selectedCompany"],
   data() {
     return {
-      poem: '',
+      evaluation: '',
     };
   },
   mounted() {
-    this.fetchPoem()
+    this.fetchEvaluation()
   },
   methods: {
-    async fetchPoem() {
+    async fetchEvaluation() {
       try {
-        const response = await axios.get(`http://localhost:5000/llm/groq/poem/${this.$props.selectedCompany}`);
-        this.poem = response.data.poem;
+        const response = await axios.get(`http://localhost:5000/llm/groq/evaluation/${this.$props.selectedCompany}`);
+        this.evaluation = response.data.evaluation;
         this.company_name=response.data.name;
-
+        this.category=response.data.category;
       } catch (error) {
         console.error("Error fetching the poem:", error);
       }
@@ -45,9 +45,9 @@ export default {
   },
   watch: {
     selectedCompany() {
-      this.poem = ''
-      this.fetchPoem();
-      }
+      this.evaluation = ''
+      this.fetchEvaluation();
     }
+  }
 }
 </script>

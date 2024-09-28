@@ -2,12 +2,15 @@
   <div>
     <v-row align="center" justify="center" class="mt-1 mb-0">
       <div>
-      <h3>Employee# of {{ $props.selectedCategory }} Companies</h3>
-      <p class="subtitle">Selected company is highlighted</p>
+      <h3>Employee# of
+        <span :style="{textTransform: 'uppercase' }">
+          {{ $props.selectedCategory }}
+        </span>
+           Companies</h3>
       </div>
     </v-row>
 
-    <div style="height: 90vh">
+    <div style="height: 95%">
       <div id='myLineBarPlot' style="height: inherit"></div>
     </div>
   </div>
@@ -15,12 +18,18 @@
 
 <script>
 import Plotly from 'plotly.js/dist/plotly';
+import {blue} from "vuetify/util/colors";
 export default {
   name: "LineBarPlot",
+  computed: {
+    blue() {
+      return blue
+    }
+  },
   // defined in parent component, no need to import, already be rendered in the template
   props: ["selectedCategory","selectedCompany"],
   data: () => ({
-    LineBarPlotData: {x: [], y: [],category:[],companyId:[]}
+    LineBarPlotData: {x: [], y: [],category:[],companyId:[],avgEmployees:0}
   }),
   mounted() {
     this.fetchData()
@@ -30,13 +39,12 @@ export default {
       try{
         // req URL to retrieve single company from backend
         var reqUrl = 'http://127.0.0.1:5000/companies?category=' + this.$props.selectedCategory
-        console.log("ReqURL " + reqUrl)}
+        console.log("ReqURLforLinebarPlot " + reqUrl)}
       catch(error){ console.error('Error fetching companies:' );
       }
       // await response and data
       const response = await fetch(reqUrl)
       const responseData = await response.json();
-      this.companyName = responseData.name //extract company name to display in title
       // transform data to usable by lineplot
       responseData.forEach((company) => {
         this.LineBarPlotData.x.push(company.name)
@@ -44,11 +52,15 @@ export default {
         this.LineBarPlotData.category.push(company.category)
         this.LineBarPlotData.companyId.push(company.id)//encode color
       })
+      // Calculate average employees
+      this.avgEmployees = this.LineBarPlotData.y.reduce((sum, num) => sum + num, 0) / this.LineBarPlotData.y.length;
       // draw the lineplot after the data is transformed
       this.drawLineBarPlot()
     },
     drawLineBarPlot() {
       const selectedCompanyId = this.$props.selectedCompany;
+      console.log('Selected Company ID:', selectedCompanyId);
+
       const colors = this.LineBarPlotData.companyId.map(id =>
           id === selectedCompanyId ? '#3777ee' : 'grey'
       );
@@ -56,13 +68,24 @@ export default {
         x: this.LineBarPlotData.x,
         y: this.LineBarPlotData.y,
         type: 'bar',
+        name: 'Employee number',
         text: this.LineBarPlotData.y.map(String),
         textposition: 'auto',
         hoverinfo: 'none',
         marker:{color:colors}
       };
+      // Average line trace
+      var trace2 = {
+        x: this.LineBarPlotData.x,
+        y: Array(this.LineBarPlotData.x.length).fill(this.avgEmployees), // fill y with average
+        type: 'scatter', // Line type
+        mode: 'lines',
+        name: 'Average Employees',
+        hoverinfo: 'y',
+        line: { color: 'red', width: 2, dash: 'dash' } // style the line
+      };
       //pay attention to the plot order/layer
-      var data = [trace1];
+      var data = [trace1,trace2];
       var layout = {
         xaxis:{title: "Company",
         tickangle:-45},
@@ -78,13 +101,17 @@ export default {
     selectedCategory: function () {
       this.LineBarPlotData.x = [];
       this.LineBarPlotData.y = [];
-
+      this.LineBarPlotData.companyId=[];
+      this.LineBarPlotData.category=[];
       this.fetchData();
     },
-    selectedCompany() {
+    selectedCompany: function () {
       this.LineBarPlotData.x = [];
       this.LineBarPlotData.y = [];
+      this.LineBarPlotData.companyId=[];
+      this.LineBarPlotData.category=[];
       this.fetchData();
+
     },
   }
 }
