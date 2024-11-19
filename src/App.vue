@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app class="custom-app-bar">
-      <h2>Yanyang Gong 23-744-063</h2>
+      <h2>Diabetes Analysis</h2>
     </v-app-bar>
     <v-main>
       <ConfigurationPanel/>

@@ -2,11 +2,7 @@
   <div>
     <v-row align="center" justify="center" class="mt-1 mb-0">
       <div>
-      <h3>Employee# of
-        <span :style="{textTransform: 'uppercase' }">
-          {{ $props.selectedCategory }}
-        </span>
-           Companies</h3>
+      <h3>Factors Highly Associated with Diabetes</h3>
       </div>
     </v-row>
 

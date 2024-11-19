@@ -2,111 +2,95 @@
 <template>
   <div>
     <v-container fluid>
-      <v-row >
-        <!-- Sidebar Section -->
-        <v-col cols="12" md="2" class="sideBar">
-            <v-row>
-              <v-col cols="12" sm="12">
-                <div class="control-panel-font">Company Overview</div>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" sm="12">
-                <v-select
-                    :items="categories.values"
-                    label="Select a category"
-                    dense
-                    v-model="categories.selectedValue"
-                    @change="changeCategory"
-                ></v-select>
-              </v-col>
-            </v-row>
-          <!-- Add space here -->
-          <div style="height: 400px;"></div>
-
-            <v-row>
-              <v-col cols="12" sm="12">
-                <div class="control-panel-font">Profit View of Company</div>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" sm="12">
-                <v-select
-                    :items="companies.values"
-                    item-title="name"
-                    item-value="id"
-                    label="Select a company"
-                    dense
-                    v-model="companies.selectedValue"
-                    @change="changeCompany"
-
-                ></v-select>
-                <v-select
-                    :items="algorithm.values"
-                    label="Select an algorithm"
-                    dense
-                    v-model="algorithm.selectedValue"
-                    @change="changeAlgorithm"
-                ></v-select>
-              </v-col>
-            </v-row>
-        </v-col>
-        <!-- Main Content Section -->
-        <v-col cols="12" md="10" style="height: 100vh">
-          <!-- First Row -->
+      <v-row>
+        <!-- Main Content Section (First and Second Rows) -->
+        <v-col cols="12" style="height: 100vh">
+          <!-- Form -->
           <v-row style="height: 50%">
-            <v-col cols="12" md="6" style="height: 100%">
+            <v-col cols="12" style="height: 100%; width: 100%; padding: 0">
+              <v-card style="height: 100%; overflow-y: auto;">
+                <IndividualForm/>
+                <div class="appendix">* The results are for reference only. If you experience any discomfort, please consult a doctor in person</div>
+              </v-card>
+            </v-col>
+          </v-row>
+          <!-- LineBarPlot Section -->
+          <v-row style="height: 50%">
+            <v-col cols="12" style="height: 100%">
+              <v-card style="height: 100%">
+                <LineBarPlot
+                    :key="lineBarPlotId"
+                    :selectedCategory="categories.selectedValue"
+                    :selectedCompany="companies.selectedValue"
+                />
+                <div class="appendix">* Click on the data point to see the company profit below.</div>
+              </v-card>
+            </v-col>
+          </v-row>
+
+          <v-row style="height: 50%">
+            <!-- Sidebar Section -->
+            <v-col cols="12" md="2" class="sideBar" v-if="showSidebar">
+              <v-row>
+                <v-col cols="12">
+                  <div class="control-panel-font">Company Overview</div>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12">
+                  <v-select
+                      :items="categories.values"
+                      label="Select a category"
+                      dense
+                      v-model="categories.selectedValue"
+                      @change="changeCategory"
+                  ></v-select>
+                </v-col>
+              </v-row>
+
+              <!-- Add space here -->
+              <div style="height: 400px;"></div>
+
+              <v-row>
+                <v-col cols="12">
+                  <div class="control-panel-font">Profit View of Company</div>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col cols="12">
+                  <v-select
+                      :items="companies.values"
+                      item-title="name"
+                      item-value="id"
+                      label="Select a company"
+                      dense
+                      v-model="companies.selectedValue"
+                      @change="changeCompany"
+                  ></v-select>
+                  <v-select
+                      :items="algorithm.values"
+                      label="Select an algorithm"
+                      dense
+                      v-model="algorithm.selectedValue"
+                      @change="changeAlgorithm"
+                  ></v-select>
+                </v-col>
+              </v-row>
+            </v-col>
+
+
+            <v-col cols="12" md="10" style="height: 100%">
               <v-card style="height: 100%">
                 <ScatterPlot :key="scatterPlotId"
                              :selectedCategory="categories.selectedValue"
                              @changeCurrentlySelectedCompany="changeCurrentlySelectedCompany"
                 />
-                <div class="appendix">* Click on the data point to see the company profit below.</div>
+                <div class="appendix">* Selected company is highlighted.</div>
               </v-card>
             </v-col>
-            <v-col cols="12" md="6" style="height: 100%">
-               <v-card style="height: 100%">
-                 <LineBarPlot  :key="lineBarPlotId"
-                               :selectedCategory="categories.selectedValue"
-                               :selectedCompany="companies.selectedValue"
-                 />
-                 <div class="appendix">* Selected company is highlighted.</div>
-                </v-card>
-            </v-col>
-        </v-row>
-          <!-- Second Row -->
-          <v-row style="height: 50%">
-          <v-col cols="12" md="6" style="height: 100%">
-            <v-card style="height: 100%">
-              <LinePlot :key="linePlotId"
-                      :selectedCompany="companies.selectedValue"
-                      :selectedAlgorithm="algorithm.selectedValue"/>
-            </v-card>
-          </v-col>
-            <v-col cols="12" md="6" style="height: 100%">
-              <v-card
-                  style="height: 100%"
-                  color=#6c6fbe
-              >
-                <div class="text-overline mb-1">
-                  Information is generated by GROQ
-                </div>
-                <!-- poem-->
-                <v-card-title>
-                  Poem
-                </v-card-title>
-                <PoemLLM :selectedCompany="companies.selectedValue" />
-                <!-- Add space here -->
-                <div style="height: 50px;"></div>
-                <!-- evaluation-->
-                <v-card-title>
-                  Evaluation
-                </v-card-title>
-                <EvaluationLLM :selectedCompany="companies.selectedValue" />
-              </v-card>
-            </v-col>
-
           </v-row>
+
         </v-col>
       </v-row>
     </v-container>
@@ -114,17 +98,18 @@
 </template>
 
 
+
 <script>
 import ScatterPlot from './ScatterPlot';
-import LinePlot from './LinePlot';
+
 import LineBarPlot from './LineBarPlot';
-import PoemLLM from "./Poem.vue";
-import EvaluationLLM  from "./Evaluation.vue";
+import IndividualForm from './IndividualForm';
+
+
 export default {
-  components: {ScatterPlot, LinePlot, LineBarPlot, PoemLLM, EvaluationLLM},
+  components: {IndividualForm, ScatterPlot,  LineBarPlot},
   data: () => ({
     scatterPlotId: 0,
-    linePlotId: 0,
     lineBarPlotId: 0,
     categories: {
       values: ['All', 'tech', 'health', 'bank'],
@@ -152,7 +137,8 @@ export default {
     algorithm: {
       values: ['none', 'random', 'regression'],
       selectedValue: 'none'
-    }
+    },
+    showSidebar: true
   }),
   methods: {
     changeCategory() {
