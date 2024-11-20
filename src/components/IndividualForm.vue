@@ -2,6 +2,7 @@
   <v-row align="start" justify="start" class="mt-1 mb-0" style="padding: 2px; margin: 0;">
     <div>
       <h3>Individual Diabetes Risk Prediction</h3>
+      <div class="appendix">The results are for reference only. If you experience any discomfort, please consult a doctor in person.</div>
     </div>
   </v-row>
   <v-container fluid style="padding: 0;">
@@ -282,13 +283,55 @@ export default {
 
     // Prediction method that returns a value based on the row data
     predict(row) {
-      if (row.name) {
-        // Example: Simulate prediction based on the name
-        row.prediction = `Prediction for ${row.name}${row.age}`;
+      const uniqueId = Date.now();
+      if (row.name && row.age && row.gender) {
+        // Prepare the data to send in the request body
+        const requestData = {
+          id: uniqueId,
+          name: row.name,
+          age: row.age,
+          gender: row.gender,
+          polyuria: row.polyuria,
+          polydipsia: row.polydipsia,
+          sudden_weight_loss: row.sudden_weight_loss,
+          weakness: row.weakness,
+          polyphagia: row.polyphagia,
+          genital_thrush: row.genital_thrush,
+          visual_blurring: row.visual_blurring,
+          itching: row.itching,
+          irritability: row.irritability,
+          delayed_healing: row.delayed_healing,
+          partial_paresis: row.partial_paresis,
+          muscle_stiffness: row.muscle_stiffness,
+          alopecia: row.alopecia,
+          obesity: row.obesity
+        };
+
+        // Send a POST request to the Flask API
+        fetch('http://127.0.0.1:5000/predict', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',  // Set the content type to JSON
+          },
+          body: JSON.stringify(requestData)  // Convert the data object to JSON
+        })
+            .then(response => response.json())  // Parse the response as JSON
+            .then(data => {
+              // Handle the prediction result
+              if (data.prediction) {
+                row.prediction = data.prediction;  // Update the row with the prediction
+              } else {
+                row.prediction = 'No prediction available';
+              }
+            })
+            .catch(error => {
+              console.error('Error during prediction:', error);
+              row.prediction = 'Error occurred during prediction';
+            });
       } else {
-        row.prediction = '';
+        row.prediction = 'Invalid input data';
       }
-    },
+    }
   }
 };
 </script>

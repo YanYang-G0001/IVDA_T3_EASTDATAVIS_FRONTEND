@@ -5,25 +5,23 @@
       <v-row>
         <!-- Main Content Section (First and Second Rows) -->
         <v-col cols="12" style="height: 100vh">
+
+          <!-- StackedBarPlotPlot Section -->
+          <v-row style="height: 100%">
+            <v-col cols="12" style="height: 100%">
+              <v-card style="height: 100%">
+                <StackedBarPlot
+                    :key="StackedBarPlotId"
+                />
+              </v-card>
+            </v-col>
+          </v-row>
+
           <!-- Form -->
           <v-row style="height: 50%">
             <v-col cols="12" style="height: 100%; width: 100%; padding: 0">
               <v-card style="height: 100%; overflow-y: auto;">
                 <IndividualForm/>
-                <div class="appendix">* The results are for reference only. If you experience any discomfort, please consult a doctor in person</div>
-              </v-card>
-            </v-col>
-          </v-row>
-          <!-- LineBarPlot Section -->
-          <v-row style="height: 50%">
-            <v-col cols="12" style="height: 100%">
-              <v-card style="height: 100%">
-                <LineBarPlot
-                    :key="lineBarPlotId"
-                    :selectedCategory="categories.selectedValue"
-                    :selectedCompany="companies.selectedValue"
-                />
-                <div class="appendix">* Click on the data point to see the company profit below.</div>
               </v-card>
             </v-col>
           </v-row>
@@ -102,15 +100,16 @@
 <script>
 import ScatterPlot from './ScatterPlot';
 
-import LineBarPlot from './LineBarPlot';
+import StackedBarPlot from './LineBarPlot';
 import IndividualForm from './IndividualForm';
 
 
+
 export default {
-  components: {IndividualForm, ScatterPlot,  LineBarPlot},
+  components: {IndividualForm, ScatterPlot,  StackedBarPlot},
   data: () => ({
     scatterPlotId: 0,
-    lineBarPlotId: 0,
+    StackedBarPlotId: 0,
     categories: {
       values: ['All', 'tech', 'health', 'bank'],
       selectedValue: 'All'
@@ -143,11 +142,11 @@ export default {
   methods: {
     changeCategory() {
       this.scatterPlotId += 1
-      this.lineBarPlotId += 1
+      this.StackedBarPlot += 1
     },
     changeCompany() {
       this.linePlotId += 1
-      this.lineBarPlotId += 1
+      this.StackedBarPlot += 1
     },
     changeAlgorithm() {
       this.linePlotId += 1
