@@ -27,6 +27,13 @@ export default {
 </script>
 
 <style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
 /* disable scrolling */
 html {
   scrollbar-width: none; /* For Firefox */
@@ -38,5 +45,6 @@ html::-webkit-scrollbar {
 .v-app-bar.custom-app-bar{ /* add v-app-bar. can improve prioity*/
   background-color:#060642;
   color: whitesmoke;
+}
 }
 </style>
