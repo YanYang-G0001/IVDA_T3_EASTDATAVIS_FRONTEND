@@ -5,7 +5,6 @@
       <v-row>
         <!-- Main Content Section (First and Second Rows) -->
         <v-col cols="12" style="height: 100vh">
-
           <!-- StackedBarPlotPlot Section -->
           <v-row style="height: 100%">
             <v-col cols="12" style="height: 100%">
@@ -13,6 +12,19 @@
                 <StackedBarPlot
                     :key="StackedBarPlotId"
                 />
+              </v-card>
+            </v-col>
+          </v-row>
+
+          <!-- Sankey -->
+          <v-row style="height: 100%">
+            <v-col cols="12" style="height:90%; width: 100%; padding: 0">
+              <v-card style="height: 100%; overflow-y: auto">
+                <div>
+                  <h2>Sankey Diagrams for What-If Analysis</h2>
+                </div>
+
+                <SankeyDiagram/>
               </v-card>
             </v-col>
           </v-row>
@@ -26,69 +38,6 @@
             </v-col>
           </v-row>
 
-          <v-row style="height: 50%">
-            <!-- Sidebar Section -->
-            <v-col cols="12" md="2" class="sideBar" v-if="showSidebar">
-              <v-row>
-                <v-col cols="12">
-                  <div class="control-panel-font">Company Overview</div>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12">
-                  <v-select
-                      :items="categories.values"
-                      label="Select a category"
-                      dense
-                      v-model="categories.selectedValue"
-                      @change="changeCategory"
-                  ></v-select>
-                </v-col>
-              </v-row>
-
-              <!-- Add space here -->
-              <div style="height: 400px;"></div>
-
-              <v-row>
-                <v-col cols="12">
-                  <div class="control-panel-font">Profit View of Company</div>
-                </v-col>
-              </v-row>
-
-              <v-row>
-                <v-col cols="12">
-                  <v-select
-                      :items="companies.values"
-                      item-title="name"
-                      item-value="id"
-                      label="Select a company"
-                      dense
-                      v-model="companies.selectedValue"
-                      @change="changeCompany"
-                  ></v-select>
-                  <v-select
-                      :items="algorithm.values"
-                      label="Select an algorithm"
-                      dense
-                      v-model="algorithm.selectedValue"
-                      @change="changeAlgorithm"
-                  ></v-select>
-                </v-col>
-              </v-row>
-            </v-col>
-
-
-            <v-col cols="12" md="10" style="height: 100%">
-              <v-card style="height: 100%">
-                <ScatterPlot :key="scatterPlotId"
-                             :selectedCategory="categories.selectedValue"
-                             @changeCurrentlySelectedCompany="changeCurrentlySelectedCompany"
-                />
-                <div class="appendix">* Selected company is highlighted.</div>
-              </v-card>
-            </v-col>
-          </v-row>
-
         </v-col>
       </v-row>
     </v-container>
@@ -98,64 +47,23 @@
 
 
 <script>
-import ScatterPlot from './ScatterPlot';
-
 import StackedBarPlot from './LineBarPlot';
 import IndividualForm from './IndividualForm';
+import SankeyDiagram from './SankeyDiagram.vue';
 
 
 
 export default {
-  components: {IndividualForm, ScatterPlot,  StackedBarPlot},
+  components: {SankeyDiagram, IndividualForm,   StackedBarPlot},
   data: () => ({
     scatterPlotId: 0,
     StackedBarPlotId: 0,
-    categories: {
-      values: ['All', 'tech', 'health', 'bank'],
-      selectedValue: 'All'
-    },
-
-    companies: {
-      values: [{id: 1, name: "alphabet", category: "tech"},
-        {id: 2, name: "apple", category: "tech"},
-        {id: 3, name: "amazon", category: "tech"},
-        {id: 4, name: "microsoft", category: "tech"},
-        {id: 5, name: "meta", category: "tech"},
-        {id: 6, name: "united health", category: "health"},
-        {id: 7, name: "johnson and johnson", category: "health"},
-        {id: 8, name: "pfizer", category: "health"},
-        {id: 9, name: "cvs health", category: "health"},
-        {id: 10, name: "mckesson", category: "health"},
-        {id: 11, name: "ubs", category: "bank"},
-        {id: 12, name: "credit suisse", category: "bank"},
-        {id: 13, name: "jp morgan", category: "bank"},
-        {id: 14, name: "goldman sachs", category: "bank"},
-        {id: 15, name: "bank of america", category: "bank"}],
-      selectedValue: 1 //default value
-    },
-    algorithm: {
-      values: ['none', 'random', 'regression'],
-      selectedValue: 'none'
-    },
-    showSidebar: true
+    SankeyDiagramId:0,
   }),
   methods: {
-    changeCategory() {
-      this.scatterPlotId += 1
-      this.StackedBarPlot += 1
-    },
-    changeCompany() {
-      this.linePlotId += 1
-      this.StackedBarPlot += 1
-    },
-    changeAlgorithm() {
-      this.linePlotId += 1
-    },
-    changeCurrentlySelectedCompany(companyId) {
-      this.companies.selectedValue = companyId
-      this.changeCompany()
+
     }
-  }
+
 }
 
 </script>

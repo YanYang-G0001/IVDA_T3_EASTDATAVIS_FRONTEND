@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-container fluid style="padding: 0; height: 100vh;">
+    <v-container fluid style="padding: 0; height: 80vh;">
       <v-row align="center" justify="center" class="mt-1 mb-0">
         <div>
-          <h3>Diabetes Distribution In Subgroups</h3>
+          <h2>Diabetes Distribution In Subgroups</h2>
         </div>
       </v-row>
     <!-- Category selection dropdown -->
@@ -133,7 +133,7 @@ export default {
       const layout = {
         barmode: 'stack', // Stacked bar plot
         xaxis: {
-          title: "Attribute Categories",
+         // title: "Subgroups",
           //tickangle: -45
         },
         yaxis: {

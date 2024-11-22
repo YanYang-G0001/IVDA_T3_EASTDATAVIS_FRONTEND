@@ -1,7 +1,7 @@
 <template>
-  <v-row align="start" justify="start" class="mt-1 mb-0" style="padding: 2px; margin: 0;">
+  <v-row align="center" justify="center" class="mt-1 mb-0" style="padding: 2px; margin: 0;">
     <div>
-      <h3>Individual Diabetes Risk Prediction</h3>
+      <h2>Individual Diabetes Risk Prediction</h2>
       <div class="appendix">The results are for reference only. If you experience any discomfort, please consult a doctor in person.</div>
     </div>
   </v-row>

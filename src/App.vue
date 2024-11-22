@@ -34,17 +34,20 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-/* disable scrolling */
-html {
-  scrollbar-width: none; /* For Firefox */
-  -ms-overflow-style: none; /* For Internet Explorer and Edge */
-}
-html::-webkit-scrollbar {
-  width: 0px; /* For Chrome, Safari, and Opera */
-}
-.v-app-bar.custom-app-bar{ /* add v-app-bar. can improve prioity*/
-  background-color:#060642;
-  color: whitesmoke;
-}
+  /* disable scrolling */
+
+  html {
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+  }
+
+  html::-webkit-scrollbar {
+    width: 0px; /* For Chrome, Safari, and Opera */
+  }
+
+  .v-app-bar.custom-app-bar { /* add v-app-bar. can improve prioity*/
+    background-color: #060642;
+    color: whitesmoke;
+  }
 }
 </style>
