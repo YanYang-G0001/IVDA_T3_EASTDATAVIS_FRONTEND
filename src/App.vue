@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app class="custom-app-bar">
-      <h2>Yanyang Gong 23-744-063</h2>
+      <h2>Diabetes Analysis</h2>
     </v-app-bar>
     <v-main>
       <ConfigurationPanel/>
@@ -27,16 +27,27 @@ export default {
 </script>
 
 <style>
-/* disable scrolling */
-html {
-  scrollbar-width: none; /* For Firefox */
-  -ms-overflow-style: none; /* For Internet Explorer and Edge */
-}
-html::-webkit-scrollbar {
-  width: 0px; /* For Chrome, Safari, and Opera */
-}
-.v-app-bar.custom-app-bar{ /* add v-app-bar. can improve prioity*/
-  background-color:#060642;
-  color: whitesmoke;
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+  /* disable scrolling */
+
+  html {
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+  }
+
+  html::-webkit-scrollbar {
+    width: 0px; /* For Chrome, Safari, and Opera */
+  }
+
+  .v-app-bar.custom-app-bar { /* add v-app-bar. can improve prioity*/
+    background-color: #060642;
+    color: whitesmoke;
+  }
 }
 </style>
