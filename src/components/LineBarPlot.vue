@@ -1,29 +1,36 @@
 <template>
+  <div class="diabetes-dashboard">
+
   <div>
-    <v-container fluid style="padding: 0; height: 80vh;">
+    <v-container fluid style="padding: 0; height: 60vh;">
+      <div class="dashboard-header">
       <v-row align="center" justify="center" class="mt-1 mb-0">
-        <div>
           <h2>Diabetes Distribution In Subgroups</h2>
-        </div>
       </v-row>
+      </div>
     <!-- Category selection dropdown -->
-    <v-row align="center" justify="center" class="mt-1 mb-0">
+    <v-row align="center"
+           justify="center"
+           class="mt-2 mb-0"
+            >
       <v-select
           v-model="attributes.selectedValue"
           :items="attributes.values"
           label="Select Attributes"
           multiple
-          dense
           outlined
+          class="custom-select"
       />
+
+
     </v-row>
 
-
-
-    <div style="height: 80%">
-      <div id='myStackedBarPlot' style="height: 100%; width: 100%"></div>
+    <div style="height: 90%">
+      <div id='myStackedBarPlot' :style="{ height: plotHeight + 'px', width: '100%' }"></div>
     </div>
     </v-container>
+  </div>
+
   </div>
 
 </template>
@@ -31,11 +38,22 @@
 <script>
 import Plotly from 'plotly.js/dist/plotly';
 import {blue} from "vuetify/util/colors";
+
 export default {
   name: "StackedBarPlot",
+
   computed: {
     blue() {
       return blue
+    },
+    plotHeight() {
+      // Set a base height and add extra space for each category
+      const baseHeight = 500;  // Minimum height for the plot
+      const categoryHeight = 30;  // Height per category (this can be adjusted)
+      const categoryCount = this.StackedBarPlotData.x.length;
+
+      // Calculate height: base height + additional space for each category
+      return baseHeight + categoryCount * categoryHeight;
     }
   },
   // defined in parent component, no need to import, already be rendered in the template
@@ -82,7 +100,7 @@ export default {
               // For other attributes, generate like polyuria-yes, polyuria-no
               return `${attribute}-${patient[attribute].toLowerCase()}`;
             })
-            .join('-'); // Combine the selected categories into one string, like 'gender-male-polyuria-yes'
+            .join(','); // Combine the selected categories into one string, like 'gender-male-polyuria-yes'
 
         // Add category to X-axis if it doesn't already exist
         if (!this.StackedBarPlotData.x.includes(attributeValue)) {
@@ -107,25 +125,27 @@ export default {
     },
     drawStackedBarPlot() {
       const trace1 = {
-        x: this.StackedBarPlotData.x,
-        y: this.StackedBarPlotData.countPositive,
+        y: this.StackedBarPlotData.x,
+        x: this.StackedBarPlotData.countPositive,
         type: 'bar',
         name: 'Positive',
+        orientation:'h',
         text: this.StackedBarPlotData.countPositive.map(String),
         textposition: 'auto',
         hoverinfo: 'x+y+name',
-        marker: { color: 'red' },
+        marker: { color: '#CB6040' },
       };
 
       const trace2 = {
-        x: this.StackedBarPlotData.x,
-        y: this.StackedBarPlotData.countNegative,
+        y: this.StackedBarPlotData.x,
+        x: this.StackedBarPlotData.countNegative,
         type: 'bar',
         name: 'Negative',
+        orientation:'h',
         text: this.StackedBarPlotData.countNegative.map(String),
         textposition: 'auto',
         hoverinfo: 'x+y+name',
-        marker: { color: 'grey' },
+        marker: { color: '#31511E' },
       };
 
       const data = [trace1, trace2];
@@ -142,7 +162,7 @@ export default {
       };
 
       const config = { responsive: true, displayModeBar: false };
-      Plotly.newPlot('myStackedBarPlot', data, layout, config);
+      Plotly.react('myStackedBarPlot', data, layout, config);
     },
   },
 
@@ -158,3 +178,49 @@ export default {
   },
 };
 </script>
+<style scoped>
+.diabetes-dashboard {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+  padding: 20px;
+  //height: 800px;
+  font-size: 50px;
+}
+
+.dashboard-header {
+  background-color: #1F4529;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+.dashboard-header h2 {
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.custom-select {
+  width: 100%;  /* Make v-select fill the parent container */
+}
+
+.custom-select .v-select__input {
+  font-size: 50px !important; /* Set font size of the input */
+  height: 40px !important; /* Adjust height of the input */
+}
+
+/* Adjust the outline border height */
+.custom-select .v-field__outline {
+  height: 50px !important; /* Set the height of the outline */
+}
+
+/* Adjust the dropdown menu's font size */
+.custom-select .v-select__menu {
+  font-size: 50px !important; /* Set font size for the dropdown items */
+}
+
+/* Adjust the label's font size */
+.custom-select .v-label {
+  font-size: 50px !important; /* Adjust label font size */
+}
+</style>

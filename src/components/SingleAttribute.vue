@@ -1,10 +1,7 @@
 <template>
   <div>
     <v-row align="center" justify="center" class="mt-1 mb-0">
-      <h3>Profit View of Company:
-        <span :style="{textTransform: 'uppercase' }">
-          {{companyName}}
-        </span>
+      <h3>Attributes Highly Related to Diabetes
       </h3>
     </v-row>
     <div style="height: 100%">
@@ -16,7 +13,7 @@
 <script>
 import Plotly from 'plotly.js/dist/plotly';
 export default {
-  name: "LinePlot",
+  name: "SingleAttribute",
   // defined in parent component, no need to import, already be rendered in the template
   props: ["selectedCompany", "selectedAlgorithm"],
   data: () => ({
@@ -28,14 +25,14 @@ export default {
     this.fetchData()
   },
   methods: {
- async fetchData() {
-   try{
-     // req URL to retrieve single company from backend
-      var reqUrl = 'http://127.0.0.1:5000/companies/' + this.$props.selectedCompany +
-          '?algorithm=' + this.$props.selectedAlgorithm
-      console.log("ReqURL " + reqUrl)}
-   catch(error){ console.error('Error fetching companies:' );
-   }
+    async fetchData() {
+      try{
+        // req URL to retrieve single company from backend
+        var reqUrl = 'http://127.0.0.1:5000/companies/' + this.$props.selectedCompany +
+            '?algorithm=' + this.$props.selectedAlgorithm
+        console.log("ReqURL " + reqUrl)}
+      catch(error){ console.error('Error fetching companies:' );
+      }
       // await response and data
       const response = await fetch(reqUrl)
       const responseData = await response.json();

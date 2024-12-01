@@ -33,7 +33,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 0px;
   /* disable scrolling */
 
   html {
@@ -46,7 +46,7 @@ export default {
   }
 
   .v-app-bar.custom-app-bar { /* add v-app-bar. can improve prioity*/
-    background-color: #060642;
+    background-color: #4A628A;
     color: whitesmoke;
   }
 }
