@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app class="custom-app-bar">
-      <h2>Diabetes Analysis</h2>
+      <h2>   Diabetes Analysis</h2>
     </v-app-bar>
     <v-main>
       <ConfigurationPanel/>
