@@ -12,10 +12,9 @@
         <v-select
             v-model="attributes.selectedValue"
             :items="attributes.values"
-            :style="{ fontFamily: 'Roboto', fontSize: '20px' }"
             label="Select Attributes"
             multiple
-            outlined
+
         />
       </v-row>
       <v-row>

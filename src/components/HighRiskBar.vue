@@ -19,17 +19,18 @@ export default {
     return {
       // Data for the chart: Highly related attributes
       attributes: [
-        { name: "Attribute 1", score: 0.85 },
-        { name: "Attribute 2", score: 0.75 },
-        { name: "Attribute 3", score: 0.65 },
-        { name: "Attribute 4", score: 0.60 },
-        { name: "Attribute 5", score: 0.55 },
-        { name: "Attribute 6", score: 0.50 },
-        { name: "Attribute 7", score: 0.45 },
-        { name: "Attribute 8", score: 0.40 },
-        { name: "Attribute 9", score: 0.3 },
-        { name: "Attribute 10", score: 0.2 },
+        { name: "Polyuria", score: 0.252752 },
+        { name: "Polydipsia", score: 0.232332 },
+        { name: "Sudden weight loss", score: 0.129721 },
+        { name: "Age", score: 0.114526 },
+        { name: "Gender", score: 0.092069 },
+        { name: "Irritability", score: 0.083030 },
+        { name: "Partial paresis", score: 0.073523 },
+        { name: "Polyphagia", score: 0.061367 },
+        { name: "Visual blurring", score: 0.035589 },
+        { name: "Alopecia", score: 0.033681 },
       ],
+
     };
   },
   mounted() {
@@ -40,9 +41,14 @@ export default {
       const xData = this.attributes.map((attr) => attr.name);
       const yData = this.attributes.map((attr) => attr.score);
       // Compute the colors based on scores
+      const minScore = Math.min(...yData);
+      const maxScore = Math.max(...yData);
+
       const colors = yData.map((score) => {
-        const red = 255 * score;// Red increases as score increases
-        const green = 255 * (1 - score); // Green decreases as score increases
+
+        const normalizedScore = (score - minScore) / (maxScore - minScore);
+        const red = 255 * normalizedScore// Red increases as score increases
+        const green = 255 * (1 - normalizedScore); // Green decreases as score increases
         return `rgb(${Math.round(red)}, ${Math.round(green)}, 0)`; // Red to green gradient
       });
 
@@ -59,11 +65,30 @@ export default {
 
         xaxis: {
           title: "Attributes",
-          tickangle: -45,
-          font:{size: 40}
+          titlefont: {
+            size: 20,  // Set the font size of the x-axis labels
+            family: 'Arial, sans-serif', // Optional: set the font family
+            color: '#000000', // Optional: set the color of the x-axis labels
+          },
+
+          tickfont: {
+            size: 20,  // Set the font size of the x-axis labels
+            family: 'Arial, sans-serif', // Optional: set the font family
+            color: '#000000', // Optional: set the color of the x-axis labels
+          },
         },
         yaxis: {
           title: "Mutual Information Score",
+          titlefont: {
+            size: 15,  // Set the font size of the x-axis labels
+            family: 'Arial, sans-serif', // Optional: set the font family
+            color: '#000000', // Optional: set the color of the x-axis labels
+          },
+          tickfont: {
+            size: 15,  // Set the font size of the x-axis labels
+            family: 'Arial, sans-serif', // Optional: set the font family
+            color: '#000000', // Optional: set the color of the x-axis labels
+          },
         },
         margin: {
           l: 50,

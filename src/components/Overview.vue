@@ -86,23 +86,23 @@ export default {
   data() {
     return {
       // Diabetic patient metrics
-      ageAverageDiabetic: 33,
-      bmiAverageDiabetic: 32,
-      avgPregnancyDiabetic: 4.5,
+      ageAverageDiabetic: 37,
+      bmiAverageDiabetic: 35,
+      avgPregnancyDiabetic: 5,
       totalPatientsDiabetic: 268,
-      glucoseAverageDiabetic:13,
-      bloodPressureAverageDiabetic:24,
-      insulinAverageDiabetic:32,
+      glucoseAverageDiabetic: 141.98,
+      bloodPressureAverageDiabetic:75,
+      insulinAverageDiabetic:202.49,
 
 
       // Non-diabetic patient metrics
-      ageAverageNonDiabetic: 39,
-      bmiAverageNonDiabetic: 26.5,
-      avgPregnancyNonDiabetic: 2.5,
+      ageAverageNonDiabetic: 31,
+      bmiAverageNonDiabetic: 31,
+      avgPregnancyNonDiabetic: 3,
       totalPatientsNonDiabetic: 500,
-      glucoseAverageNonDiabetic:12,
-      bloodPressureAverageNonDiabetic:21,
-      insulinAverageNonDiabetic:22,
+      glucoseAverageNonDiabetic:110.53,
+      bloodPressureAverageNonDiabetic:70,
+      insulinAverageNonDiabetic:128.10,
 
       totalPatients: 768,
       selectedPatientType: 'diabetic' // Default to diabetic patients
