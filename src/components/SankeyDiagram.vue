@@ -1,35 +1,67 @@
 <template>
   <div id="app" style="display: flex; gap: 20px;">
     <!-- 左侧过滤器部分 -->
-    <div style="width: 300px; border: 1px solid #ccc; border-radius: 5px; padding: 20px; background-color: #f8f9fa;">
-      <h3 style="margin-bottom: 20px; text-align: center;">Filters</h3>
-      <details
+    <div
+        style="margin-bottom: 20px; text-align: center; font-size: 18px; color: #333; font-weight: 600;"
+    >
+      <h3 style="margin-bottom: 20px; text-align: center;font-size: 24px;background-color: #162c83; color: #fafafa;">Filters</h3>
+      <div
           v-for="(node, index) in filteredSelectedNodes"
           :key="index"
-          style="margin-bottom: 10px;"
+          style="margin-bottom: 20px;"
       >
-        <summary>{{ getNodeName(node) }}</summary>
-        <div style="margin-top: 10px;">
-          <select
-              v-model="selectedFilters[node]"
-              multiple
-              style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px;"
+        <label
+            :for="'filter-' + index"
+            style="font-weight: 600; color: #000000; margin-bottom: 5px; display: block;"
+        >
+          {{ getNodeName(node) }}
+        </label>
+
+        <div style="margin-top: 10px;" class="custom-dropdown">
+          <button
+              @click="toggleDropdown(node)"
+              style="width: 100%; padding: 8px; border: 1px solid #000000; border-radius: 5px; background-color: #f9f9f9; font-size: 15px; color: #cccccc ;text-align: left; cursor: pointer;"
           >
-            <option v-for="option in filterOptions[node]" :value="option" :key="option">
+            {{ getNodeName(node) }}
+            <span
+                style="float: right; transform: rotate(90deg); font-size: 12px;"
+                v-if="dropdownVisible[node]"
+            >&#9654;</span>
+            <span
+                style="float: right; font-size: 12px;"
+                v-else
+            >&#9660;</span>
+          </button>
+          <div
+              v-show="dropdownVisible[node]"
+              style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; background-color: #fff; margin-top: 5px;"
+          >
+            <label
+                v-for="option in filterOptions[node]"
+                :key="option"
+                style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;"
+            >
+              <input
+                  type="checkbox"
+                  :value="option"
+                  v-model="selectedFilters[node]"
+                  style="margin-right: 5px;"
+              />
               {{ option }}
-            </option>
-          </select>
+            </label>
+          </div>
         </div>
-      </details>
+
+      </div>
       <button
           @click="applyFilters"
-          style="background-color: #28a745; color: white; border: none; padding: 10px; width: 100%; border-radius: 3px; cursor: pointer; margin-bottom: 10px;"
+          style="background-color: #006400; color: white;font-size: 15px; border: none; padding: 10px; width: 100%; border-radius: 3px; cursor: pointer; margin-bottom: 10px;"
       >
         Apply Filters
       </button>
       <button
           @click="resetToDefault"
-          style="background-color: #ff4d4f; color: white; border: none; padding: 10px; width: 100%; border-radius: 3px; cursor: pointer;"
+          style="background-color: #B22222; color: white;font-size: 15px; border: none; padding: 10px; width: 100%; border-radius: 3px; cursor: pointer;"
       >
         Reset to Default
       </button>
@@ -37,39 +69,48 @@
 
     <!-- 中间 Sankey 图 -->
     <div style="flex-grow: 1;">
-      <div style="display: flex; margin-bottom: 0px; align-items: center; gap: 15px;">
-        <div
-            v-for="(node, index) in filteredSelectedNodes"
-            :key="index"
-            style="display: flex; align-items: center; gap: 10px;"
-        >
-          <div style="border: 1px solid #ccc; padding: 10px; border-radius: 5px; background-color: #f9f9f9; min-width: 150px;">
-            {{ getNodeName(node) }}
-          </div>
-          <button
-              v-if="index !== filteredSelectedNodes.length - 1"
-              @click="removeNode(index)"
-              style="border: none; background-color: #ff4d4f; color: white; padding: 5px 10px; border-radius: 3px; cursor: pointer;"
+      <div
+          style="display: flex; margin-bottom: 20px; align-items: center; gap: 15px; justify-content: space-between;"
+      >
+        <!-- 节点选择部分 -->
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+          <div
+              v-for="(node, index) in filteredSelectedNodes"
+              :key="index"
+              style="display: flex; align-items: center; background-color: #f8f9fa; border: 1px solid #ddd; padding: 8px 10px; border-radius: 5px; gap: 8px;"
           >
-            ✕
-          </button>
+    <span style="font-size: 18px; color: #000000; font-weight: 600;">
+      {{ getNodeName(node) }}
+    </span>
+            <button
+                @click="removeNode(index)"
+                style="background-color: #B22222; color: white; border: none; padding: 2px 3px; border-radius: 3px; cursor: pointer;"
+            >
+              ✕
+            </button>
+          </div>
         </div>
 
+        <!-- 新增节点 -->
         <div style="display: flex; align-items: center; gap: 10px;">
           <select
               v-model="newNode"
-              style="border: 1px solid #ccc; padding: 10px; border-radius: 5px; font-size: 14px; min-width: 150px; background-color: #f9f9f9;"
+              style="border: 1px solid #ccc; padding: 10px; border-radius: 5px; font-size: 15px; color:#cccccc; min-width: 180px; background-color: #fff;"
           >
-            <option value="" disabled>Select Node...</option>
-            <option v-for="nodeOption in filteredAvailableNodes()" :value="nodeOption" :key="nodeOption">
+            <option value="" disabled>Please Select Attributes</option>
+            <option
+                v-for="nodeOption in filteredAvailableNodes()"
+                :value="nodeOption"
+                :key="nodeOption"
+            >
               {{ getNodeName(nodeOption) }}
             </option>
           </select>
           <button
               @click="addNode"
-              style="background-color: #1890ff; color: white; border: none; padding: 8px 12px; border-radius: 3px; cursor: pointer;"
+              style="background-color: #162c83; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: 600;"
           >
-            + Node
+            Add Node
           </button>
         </div>
       </div>
@@ -85,27 +126,29 @@ export default {
   name: "SankeyDiagram",
   data() {
     return {
-      availableNodes: ["C1", "C2", "C3", "C4", "C5", "C6", "C7"], // 可选属性
-      selectedNodes: ["C1", "C2", "C8"], // 默认选择的节点
+      dropdownVisible: {}, // 控制每个下拉框的显示/隐藏状态
+      availableNodes: ["Pregnancies", "Glucose", "Blood_pressure", "Skin_thickness", "Insulin", "Body_mass_index", "Diabetes_pedigree_function", "Age", "Diabetes_Probability"], // 可选属性
+      selectedNodes: ["Age", "Glucose", "Diabetes_Probability"], // 默认选择的节点
       newNode: "", // 下拉框的新增节点选择
       filterOptions: {}, // 每个属性的可选值
       selectedFilters: {}, // 用户选定的过滤条件
       nodeNames: {
-        C1: "Smoking",
-        C2: "Cholesterol",
-        C3: "Blood Pressure",
-        C4: "Age",
-        C5: "BMI",
-        C6: "Physical Activity",
-        C7: "Family History",
-        C8: "Diabetes Risk",
+        Pregnancies: "Pregnancies",
+        Glucose: "Glucose",
+        Blood_pressure: "Blood Pressure",
+        Skin_thickness: "Skin Thickness",
+        Insulin: "Insulin",
+        Body_mass_index: "Weight",
+        Diabetes_pedigree_function: "Diabetes Pedigree Function",
+        Age: "Age",
+        Diabetes_Probability: "Diabetes Probability",
       },
     };
   },
   computed: {
     filteredSelectedNodes() {
       // 过滤掉 C8 节点，只在必要的地方展示
-      return this.selectedNodes.filter((node) => node !== "C8");
+      return this.selectedNodes.filter((node) => node !== "Diabetes_Probability");
     },
   },
   mounted() {
@@ -113,6 +156,15 @@ export default {
     this.fetchAndRenderSankey();
   },
   methods: {
+      toggleDropdown(node) {
+        // 如果 dropdownVisible 没有为该节点初始化，先初始化为 false
+        if (!this.dropdownVisible[node]) {
+          this.dropdownVisible[node] = false; // 直接设置属性
+        }
+
+        // 切换下拉框的显示状态
+        this.dropdownVisible[node] = !this.dropdownVisible[node];
+      },
     fetchFilterOptions() {
       // 获取过滤器选项
       fetch("http://127.0.0.1:5000/api/filter-options")
@@ -154,6 +206,7 @@ export default {
 
       },
     renderSankey(data) {
+      console.log("Data for Sankey Rendering:", data);
       if (data && data.nodes && data.nodes.label && data.links) {
         const sankeyData = {
           type: "sankey",
@@ -169,21 +222,22 @@ export default {
             source: data.links.source,
             target: data.links.target,
             value: data.links.value,
+            color: data.links.color, //add link color
           },
         };
 
-      //  const layout = {
-        //  title: "Sankey Diagrams for What-If Analysis",
-          //font: {
-            //size: 16,         // Change the font size
-            //family: "Arial",  // Change the font family
-            //color: "black"     // Change the font color
-         // }
+        const layout = {
+          font: {
+            size: 15,         // Change the font size
+            family: "Arial",  // Change the font family
+            color: "black",     // Change the font color
+            weight: "bold"
+         }
 
 
-        //};
+        };
 
-        Plotly.newPlot("sankey", [sankeyData]);
+        Plotly.newPlot("sankey", [sankeyData],layout);
       } else {
         console.error("Invalid data format for Sankey diagram.");
       }
@@ -192,13 +246,15 @@ export default {
       this.fetchAndRenderSankey();
     },
     resetToDefault() {
-      this.selectedNodes = ["C1", "C2", "C8"];
+      // 清空所有已应用的过滤器
       this.selectedFilters = Object.fromEntries(
           Object.keys(this.filterOptions).map((key) => [key, []])
       );
 
-      this.fetchAndRenderSankey();
+      // 保留当前选定的节点
+      this.fetchAndRenderSankey(); // 更新 Sankey 图
     },
+
     addNode() {
       if (this.selectedNodes.length >= 6) {
         alert("Cannot add more than 6 nodes.");
@@ -218,7 +274,7 @@ export default {
         this.selectedNodes.splice(index, 1);
         this.fetchAndRenderSankey();
       } else {
-        alert("At least two nodes and diabetes risk (C8) must remain.");
+        alert("At least two nodes and diabetes risk must remain.");
       }
     },
     getNodeName(nodeKey) {
@@ -266,4 +322,24 @@ button {
 button:hover {
   opacity: 0.9;
 }
+/* 滚动条样式优化 */
+div[style*="overflow-y: auto;"]::-webkit-scrollbar {
+  width: 6px;
+}
+
+div[style*="overflow-y: auto;"]::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 3px;
+}
+
+div[style*="overflow-y: auto;"]::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+.custom-dropdown label {
+  font-size: 16px; /* 这里设置你需要的字体大小 */
+}
+
+
+
 </style>
