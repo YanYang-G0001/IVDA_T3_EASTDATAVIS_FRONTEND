@@ -104,10 +104,9 @@ body{
   bottom: 10px;
   right: 10px;
   color: gray;
-  font-size: 12px;
 }
 .v-card {
-  background-color: #F3F3E0; /* Custom light cyan background */
+  background-color: #fafafa; /* Custom light cyan background */
   left:10px;
 }
 .dashboard-header {
@@ -119,7 +118,7 @@ body{
 }
 .dashboard-header h2 {
   font-family: 'Roboto', sans-serif;
-  font-size: 24px;
+  font-size: 34px;
   font-weight: 500;
   margin: 0;
 }
