@@ -1,20 +1,19 @@
 <template>
   <div class="diabetes-dashboard">
-    <v-container fluid>
       <div class="dashboard-header">
         <v-row align="center" justify="center" class="mt-1 mb-0">
           <h2>Diabetes Distribution In Subgroups</h2>
         </v-row>
       </div>
-
+    <v-container fluid>
       <!-- Category selection dropdown -->
       <v-row align="center" justify="center" class="mt-2 mb-0">
         <v-select
             v-model="attributes.selectedValue"
             :items="attributes.values"
             label="Select Attributes"
+            style="font-weight: bold; font-size: 25px;"
             multiple
-
         />
       </v-row>
       <v-row>
@@ -40,15 +39,16 @@
                   <v-chip
                       :color="getAttributeColor(attribute)"
                       text-color="white"
-                      small
+
                       class="ma-1"
+                      style="font-size: 18px;"
                   >
                     {{ attribute }}: {{ getAttributeValue(attribute) }}
                   </v-chip>
                 </v-col>
               </v-row>
               <!-- Pie Chart for Positive/Negative -->
-              <div id="pieChart" style="width: 100%; height: 300px; margin-top: 10px;"></div>
+              <div id="pieChart" style="width: 400px; height: 400px;"></div>
             </v-card-text>
           </v-card>
         </v-col>
@@ -206,12 +206,9 @@ export default {
             },
           ];
 
-          const layout = {
-            height: 150,
-            margin: { t: 0, b: 0, l: 0, r: 0 },
-          };
 
-          Plotly.newPlot('pieChart', data, layout, { responsive: true });
+
+          Plotly.newPlot('pieChart', data,  { responsive: true });
         } else {
           console.error('Pie chart container not found.');
         }
