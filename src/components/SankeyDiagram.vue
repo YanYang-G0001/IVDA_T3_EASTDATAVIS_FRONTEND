@@ -2,9 +2,9 @@
   <div id="app" style="display: flex; gap: 20px;">
     <!-- 左侧过滤器部分 -->
     <div
-        style="margin-bottom: 20px; text-align: center; font-size: 18px; color: #333; font-weight: 600;"
+        style="margin-bottom: 20px; text-align: center; font-size: 24px; color: #333; font-weight: 600;"
     >
-      <h3 style="margin-bottom: 20px; text-align: center;font-size: 24px;background-color: #162c83; color: #fafafa;">Filters</h3>
+      <h3 style="margin-bottom: 20px; text-align: center;font-size: 28px;background-color: #162c83; color: #fafafa;">Filters</h3>
       <div
           v-for="(node, index) in filteredSelectedNodes"
           :key="index"
@@ -12,7 +12,7 @@
       >
         <label
             :for="'filter-' + index"
-            style="font-weight: 600; color: #000000; margin-bottom: 5px; display: block;"
+            style="font-weight: 600; color: #000000; margin-bottom: 5px; display: block;font-size: 24px"
         >
           {{ getNodeName(node) }}
         </label>
@@ -20,15 +20,15 @@
         <div style="margin-top: 10px;" class="custom-dropdown">
           <button
               @click="toggleDropdown(node)"
-              style="width: 100%; padding: 8px; border: 1px solid #000000; border-radius: 5px; background-color: #f9f9f9; font-size: 15px; color: #cccccc ;text-align: left; cursor: pointer;"
+              style="width: 100%; padding: 8px; border: 1px solid #000000; border-radius: 5px; background-color: #f9f9f9; font-size: 22px; color: #cccccc ;text-align: left; cursor: pointer;"
           >
             {{ getNodeName(node) }}
             <span
-                style="float: right; transform: rotate(90deg); font-size: 12px;"
+                style="float: right; transform: rotate(90deg); font-size: 22px;"
                 v-if="dropdownVisible[node]"
             >&#9654;</span>
             <span
-                style="float: right; font-size: 12px;"
+                style="float: right; font-size: 22px;"
                 v-else
             >&#9660;</span>
           </button>
@@ -55,13 +55,13 @@
       </div>
       <button
           @click="applyFilters"
-          style="background-color: #006400; color: white;font-size: 15px; border: none; padding: 10px; width: 100%; border-radius: 3px; cursor: pointer; margin-bottom: 10px;"
+          style="background-color: #006400; color: white;font-size: 24px; border: none; padding: 10px; width: 100%; border-radius: 3px; cursor: pointer; margin-bottom: 10px;"
       >
         Apply Filters
       </button>
       <button
           @click="resetToDefault"
-          style="background-color: #B22222; color: white;font-size: 15px; border: none; padding: 10px; width: 100%; border-radius: 3px; cursor: pointer;"
+          style="background-color: #B22222; color: white;font-size: 24px; border: none; padding: 10px; width: 100%; border-radius: 3px; cursor: pointer;"
       >
         Reset to Default
       </button>
@@ -79,7 +79,7 @@
               :key="index"
               style="display: flex; align-items: center; background-color: #f8f9fa; border: 1px solid #ddd; padding: 8px 10px; border-radius: 5px; gap: 8px;"
           >
-    <span style="font-size: 18px; color: #000000; font-weight: 600;">
+    <span style="font-size: 24px; color: #000000; font-weight: 600;">
       {{ getNodeName(node) }}
     </span>
             <button
@@ -95,7 +95,7 @@
         <div style="display: flex; align-items: center; gap: 10px;">
           <select
               v-model="newNode"
-              style="border: 1px solid #ccc; padding: 10px; border-radius: 5px; font-size: 15px; color:#cccccc; min-width: 180px; background-color: #fff;"
+              style="border: 1px solid #c5c3c3; padding: 10px; border-radius: 5px; font-size: 24px; color:#000000; min-width: 180px; background-color: #fff;"
           >
             <option value="" disabled>Please Select Attributes</option>
             <option
@@ -108,13 +108,13 @@
           </select>
           <button
               @click="addNode"
-              style="background-color: #162c83; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: 600;"
+              style="background-color: #162c83; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: 600;font-size: 24px"
           >
             Add Node
           </button>
         </div>
       </div>
-      <div id="sankey" style="width: 100%; height: 600px; border: 1px solid #ccc; border-radius: 5px;"></div>
+      <div id="sankey" style="width: 100%; height: 800px; background-color: transparent; border-radius: 1px;"></div>
     </div>
   </div>
 </template>
@@ -228,13 +228,20 @@ export default {
 
         const layout = {
           font: {
-            size: 15,         // Change the font size
-            family: "Arial",  // Change the font family
+            size: 24,         // Change the font size
+            family: "Roboto",  // Change the font family
             color: "black",     // Change the font color
             weight: "bold"
-         }
-
-
+         },
+          hoverlabel: {
+            font: {
+              size: 24,
+              family: "Roboto",
+              color: "#ffffff",
+            },
+            bgcolor: "#333",
+            bordercolor: "#ccc",
+          },
         };
 
         Plotly.newPlot("sankey", [sankeyData],layout);
@@ -292,8 +299,8 @@ export default {
 <style>
 #sankey {
   margin: 0 auto;
-  max-width: 1200px;
-  height: 600px;
+  max-width: 2500px;
+  height: 1000px;
 }
 details {
   cursor: pointer;
@@ -337,7 +344,7 @@ div[style*="overflow-y: auto;"]::-webkit-scrollbar-track {
 }
 
 .custom-dropdown label {
-  font-size: 16px; /* 这里设置你需要的字体大小 */
+  font-size: 22px;
 }
 
 
