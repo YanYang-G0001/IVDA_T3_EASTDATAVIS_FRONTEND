@@ -17,6 +17,7 @@
 
       </v-row>
 
+
       <!-- Second Row -->
       <v-row>
         <v-col cols="8" style="height: 800px">
@@ -27,6 +28,7 @@
             />
           </v-card>
         </v-col>
+        
         <!-- Form -->
         <v-col cols="4" style="height:800px; width: 100%">
           <v-card style="height: 100%">
@@ -34,6 +36,7 @@
           </v-card>
         </v-col>
       </v-row>
+
 
       <!-- Third Row -->
           <!-- Sankey -->
@@ -49,7 +52,15 @@
               </v-card>
             </v-col>
           </v-row>
-
+          
+          <!-- Add DiabetesAttributesChart on a new row -->
+          <v-row>
+            <v-col cols="12" style="height: 300px; width: 100%; padding: 10px">
+              <v-card style="height: 100%; overflow-y: auto">
+                <DiabetesAttributesChart/>
+              </v-card>
+            </v-col>
+          </v-row>
     </v-container>
   </div>
 </template>
@@ -62,14 +73,15 @@ import IndividualForm from './IndividualForm';
 import SankeyDiagram from './SankeyDiagram.vue';
 import OverviewDashboard from './Overview.vue';
 import HighRiskAttribute from './HighRiskBar.vue';
-
+import DiabetesAttributesChart from './DiabetesAttributesChart.vue'; // 导入组件
 
 export default {
-  components: {HighRiskAttribute, SankeyDiagram, IndividualForm,   StackedBarPlot, OverviewDashboard},
+  components: {HighRiskAttribute, SankeyDiagram, IndividualForm,   StackedBarPlot, OverviewDashboard,DiabetesAttributesChart},
   data: () => ({
     scatterPlotId: 0,
     StackedBarPlotId: 0,
     SankeyDiagramId:0,
+    
   }),
   methods: {
 
