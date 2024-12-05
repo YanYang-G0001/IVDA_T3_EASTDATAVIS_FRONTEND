@@ -46,7 +46,7 @@ export default {
   }
 
   .v-app-bar.custom-app-bar { /* add v-app-bar. can improve prioity*/
-    background-color: #4A628A;
+    background-color: #1F4529;
     color: whitesmoke;
   }
 }

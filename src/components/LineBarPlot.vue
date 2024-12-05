@@ -1,25 +1,26 @@
 <template>
   <div class="diabetes-dashboard">
-      <div class="dashboard-header">
-        <v-row align="center" justify="center" class="mt-1 mb-0">
-          <h2>Diabetes Distribution In Subgroups</h2>
-        </v-row>
-      </div>
+    <div class="dashboard-header">
+      <v-row align="center" justify="center" class="mt-1 mb-0">
+        <h2>Diabetes Distribution In Subgroups</h2>
+      </v-row>
+    </div>
     <v-container fluid>
       <!-- Category selection dropdown -->
       <v-row align="center" justify="center" class="mt-2 mb-0">
-        <v-select
-            v-model="attributes.selectedValue"
-            :items="attributes.values"
-            label="Select Attributes"
-            style="font-weight: bold; font-size: 25px;"
-            multiple
+
+        <v-select class="v-xx"
+                  v-model="attributes.selectedValue"
+                  :items="attributes.values"
+                  label="Select Attributes"
+                  multiple
+
         />
       </v-row>
       <v-row>
         <!-- Bar Chart Column -->
         <v-col cols="8" style="height: 500px;">
-          <div id="myStackedBarPlot" style="width: 100%; height: 100%;"></div>
+          <div id="myStackedBarPlot" style="width: 100%; height: 100%"></div>
         </v-col>
 
         <!-- Selected Subgroup Column -->
@@ -304,5 +305,12 @@ export default {
   font-size: 24px;
   font-weight: 500;
   margin: 0;
+}
+::v-deep(.v-field__input) {
+  font-size: 24px !important; /* 修改下拉框输入字体 */
+  margin-top: 10px !important;
+}
+::v-deep(.v-label) {
+  font-size: 24px !important; /* 修改整体字段字体大小 */
 }
 </style>
