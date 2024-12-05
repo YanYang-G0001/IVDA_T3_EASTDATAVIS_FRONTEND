@@ -164,8 +164,8 @@ export default {
   margin-bottom: 20px;
 }
 
-.dashboard-header h1 {
-  font-size: 24px;
+.dashboard-header h2 {
+  font-size: 34px;
   font-weight: 500;
   margin: 0;
 }

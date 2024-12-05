@@ -19,16 +19,16 @@ export default {
     return {
       // Data for the chart: Highly related attributes
       attributes: [
-        { name: "Polyuria", score: 0.252752 },
-        { name: "Polydipsia", score: 0.232332 },
-        { name: "Sudden weight loss", score: 0.129721 },
-        { name: "Age", score: 0.114526 },
-        { name: "Gender", score: 0.092069 },
-        { name: "Irritability", score: 0.083030 },
-        { name: "Partial paresis", score: 0.073523 },
-        { name: "Polyphagia", score: 0.061367 },
-        { name: "Visual blurring", score: 0.035589 },
-        { name: "Alopecia", score: 0.033681 },
+        { name: "Polyuria", score: 0.253 },
+        { name: "Polydipsia", score: 0.232 },
+        { name: "Sudden weight loss", score: 0.130 },
+        { name: "Age", score: 0.115 },
+        { name: "Gender", score: 0.092 },
+        { name: "Irritability", score: 0.083 },
+        { name: "Partial paresis", score: 0.074 },
+        { name: "Polyphagia", score: 0.061 },
+        { name: "Visual blurring", score: 0.036 },
+        { name: "Alopecia", score: 0.034 },
       ],
 
     };
@@ -46,10 +46,24 @@ export default {
 
       const colors = yData.map((score) => {
 
-        const normalizedScore = (score - minScore) / (maxScore - minScore);
-        const red = 255 * normalizedScore// Red increases as score increases
-        const green = 255 * (1 - normalizedScore); // Green decreases as score increases
-        return `rgb(${Math.round(red)}, ${Math.round(green)}, 0)`; // Red to green gradient
+
+        const normalizedScore = (score - minScore) / (maxScore - minScore)
+
+        // Define the RGB values for #B22222 (DarkRed) and #006400 (DarkGreen)
+        const redEnd = 178;  // RGB of #B22222
+        const greenEnd = 34;
+        const blueEnd = 34;
+
+
+        const redStart = 0;  // RGB of #006400
+        const greenStart = 100;
+        const blueStart = 0;
+
+        const red = redStart + (redEnd - redStart) * normalizedScore;
+        const green = greenStart + (greenEnd - greenStart) * normalizedScore;
+        const blue = blueStart + (blueEnd - blueStart) * normalizedScore;
+
+        return `rgb(${Math.round(red)}, ${Math.round(green)}, ${Math.round(blue)})`; // Red to green gradient
       });
 
       const trace = {
@@ -119,7 +133,7 @@ export default {
   margin-bottom: 20px;
 }
 .dashboard-header h2 {
-  font-size: 24px;
+  font-size: 34px;
   font-weight: 500;
   margin: 0;
 }

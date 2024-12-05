@@ -1,12 +1,11 @@
 <template>
-  <div class="diabetes-dashboard" style="font-size: 35px">
-    <v-container fluid style="font-size: 35px">
-      <div class="dashboard-header">
-        <v-row align="center" justify="center" class="mt-1 mb-0">
-          <h2>Diabetes Distribution In Subgroups</h2>
-        </v-row>
-      </div>
-<div>
+  <div class="diabetes-dashboard">
+  <div class="dashboard-header">
+    <v-row align="center" justify="center" class="mt-1 mb-0">
+      <h2>Diabetes Distribution In Subgroups</h2>
+    </v-row>
+  </div>
+  <v-container fluid>
       <!-- Category selection dropdown -->
       <v-row align="center" justify="center" class="mt-2 mb-0">
 
@@ -17,7 +16,7 @@
             multiple
         />
       </v-row>
-</div>
+
       <v-row>
         <!-- Bar Chart Column -->
         <v-col cols="8" style="height: 500px;">
@@ -41,22 +40,26 @@
                   <v-chip
                       :color="getAttributeColor(attribute)"
                       text-color="white"
-                      small
+
                       class="ma-1"
+                      style="font-size: 22px;"
                   >
                     {{ attribute }}: {{ getAttributeValue(attribute) }}
                   </v-chip>
                 </v-col>
               </v-row>
-              <!-- Pie Chart for Positive/Negative -->
-              <div id="pieChart" style="width: 100%; height: 300px; margin-top: 10px;"></div>
+              <div style="display: flex; justify-content: center; align-items: center; height: 400px;">
+                <div id="pieChart" style="width: 400px; height: 400px;"></div>
+              </div>
             </v-card-text>
           </v-card>
         </v-col>
       </v-row>
 
 
-    </v-container>
+
+
+  </v-container>
   </div>
 </template>
 
@@ -157,7 +160,7 @@ export default {
         text: this.StackedBarPlotData.countNegative.map(String),
         textposition: 'auto',
         hoverinfo: 'x+y+name',
-        marker: { color: '#31511E' },
+        marker: { color: '#006400' },
       };
 
       const data = [trace1, trace2];
@@ -207,12 +210,9 @@ export default {
             },
           ];
 
-          const layout = {
-            height: 150,
-            margin: { t: 0, b: 0, l: 0, r: 0 },
-          };
 
-          Plotly.newPlot('pieChart', data, layout, { responsive: true });
+
+          Plotly.newPlot('pieChart', data, { responsive: true });
         } else {
           console.error('Pie chart container not found.');
         }
@@ -310,10 +310,23 @@ export default {
   margin: 0;
 }
 ::v-deep(.v-field__input) {
-  font-size: 34px !important; /* 修改下拉框输入字体 */
+  font-size: 24px !important; /* 修改下拉框输入字体 */
   margin-top: 10px !important;
 }
 ::v-deep(.v-label) {
-  font-size: 25px !important; /* 修改整体字段字体大小 */
+  font-size: 20px !important; /* 修改整体字段字体大小 */
 }
+::v-deep(.v-list-item) {
+  font-size: 24px !important; /* 修改下拉框输入字体 */
+  margin-top: 10px !important;
+}
+::v-deep(.v-filed__loader) {
+  font-size: 20px !important; /* 修改整体字段字体大小 */
+}
+
+
+.v-menu .v-btn {
+  font-size: 16px;  /* Set the font size for the button */
+}
+
 </style>

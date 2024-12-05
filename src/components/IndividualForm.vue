@@ -1,10 +1,10 @@
 <template>
   <div class="diabetes-dashboard">
-      <div class="dashboard-header">
-        <v-row align="center" justify="center" class="mt-1 mb-0">
-          <h2>Individual Diabetes Risk Prediction</h2>
-        </v-row>
-      </div>
+    <div class="dashboard-header">
+      <v-row align="center" justify="center" class="mt-1 mb-0">
+        <h2>Individual Diabetes Risk Prediction</h2>
+      </v-row>
+    </div>
 
     <v-container fluid style="font-size: 30px; padding: 0;">
 
@@ -47,27 +47,6 @@
           />
         </template>
 
-        <template v-slot:[`item.st`]="{ item }">
-          <v-text-field
-              v-model="item.st" @input="predict(item)"
-          />
-        </template>
-
-        <template v-slot:[`item.dpf`]="{ item }">
-          <v-text-field
-              v-model="item.dpf" @input="predict(item)"
-              dense
-          />
-        </template>
-
-        <template v-slot:[`item.pregnancies`]="{ item }">
-          <v-text-field
-              v-model="item.pregnancies" @input="predict(item)"
-              dense
-          />
-        </template>
-
-
         <!-- Prediction Result Column -->
         <template v-slot:[`item.prediction`]="{ item }">
           <v-text-field
@@ -87,7 +66,7 @@
       </v-row>
     </v-container>
   </div>
-  </template>
+</template>
 
 <script>
 import Plotly from 'plotly.js/dist/plotly';
@@ -103,9 +82,9 @@ export default {
           bmi: '30.84', //39
           insulin: '128.10', //160
           bp: '70.63', //88
-          st:' 27.04', // 100
-          dpf:'0.42', //1
-          pregnancies:'3', //0
+          // st:' 27.04', // 100
+          // dpf:'0.42', //1
+          // pregnancies:'3', //0
           prediction: ''
         }
       ],
@@ -115,13 +94,16 @@ export default {
         { title: 'BMI', value: 'bmi', description: 'Body mass index (weight in kg/(height in m)^2)' },
         { title: 'Insulin', value: 'insulin', description: '2-Hour serum insulin (mu U/ml)' },
         { title: 'BP', value: 'bp', description: 'blood pressure' },
-
-        { title: 'ST', value: 'st', description: 'Triceps skin fold thickness (mm)' },
-        { title: 'DPF', value: 'dpf', description: '' },
-        { title: 'Pregnancies', value: 'pregnancies', description: 'number of times preganant' },
+        //{ title: 'ST', value: 'st', description: 'Triceps skin fold thickness (mm)' },
+        //{ title: 'DPF', value: 'dpf', description: '' },
+        // { title: 'Pregnancies', value: 'pregnancies', description: 'number of times preganant' },
 
         { title: 'Prediction', value: 'prediction', align: 'center', key: 'prediction', description: '1. Positive, 2. Negative.' }
-      ]
+      ],
+      //use average value to replace non-displayed attribute
+      constantPregnancies: 3,
+      constantDPF: 0.47,
+      constantST:29.1
     };
   },
   mounted() {
@@ -129,33 +111,33 @@ export default {
   },
   methods: {
     drawRadarChart(patientData = null) {
-      const diabetesAvg = [0.12, 0.66, 0.28, 0.03, 1.00, 0.05, 0.16, 0.06];
-      const nonDiabetesAvg = [0.03, 0.48, 0.25, 0.01, 0.58, 0.02, 0.91, 0.02];
-      const patientRadarData = patientData || [0.01, 0.54, 0.35, 0.13, 0.63, 0.15, 0.00, 0.15];  // Fallback if no patient data provided
+      const diabetesAvg = [0.63, 0.52, 0.23, 0.35, 0.27];
+      const nonDiabetesAvg = [0.43, 0.48, 0.14, 0.26, 0.17];
+      const patientRadarData = patientData || [0.53, 0.5, 0.185, 0.305, 0.22];  // Fallback if no patient data provided,
+      const labels = ['Glucose', 'BP', 'Insulin', 'BMI', 'Age']; // Axis labels
+      const closedLabels = [...labels, labels[0]];
       const data = [
         {
           type: 'scatterpolar',
-          r: diabetesAvg,// Values for Diabetes Avg
-          theta: ['Pregnancies', 'Glucose', 'Blood pressure', 'Skin thickness',
-            'Insulin', 'Body mass index', 'Diabetes pedigree function', 'Age'], // Axis labels
+          r: [...diabetesAvg, diabetesAvg[0]],// Values for Diabetes Avg
+          theta:  closedLabels, // Axis labels
           //fill: 'toself',
           line: { color: '#B22222' },
-          name: 'Diabetes Avg'
+          mode: 'lines+markers',
+          name: 'Diabetes Avg',
         },
         {
           type: 'scatterpolar',
-          r: nonDiabetesAvg, // Values for Non-Diabetes Avg
-          theta: ['Pregnancies', 'Glucose', 'Blood pressure', 'Skin thickness',
-            'Insulin', 'Body mass index', 'Diabetes pedigree function', 'Age'],
+          r: [...nonDiabetesAvg, nonDiabetesAvg[0]], // Values for Non-Diabetes Avg
+          theta:  closedLabels,
           //fill: 'toself',
           line: { color: '#006400' },
           name: 'Non-Diabetes Avg'
         },
         {
           type: 'scatterpolar',
-          r: patientRadarData,
-          theta: ['Pregnancies', 'Glucose', 'Blood pressure', 'Skin thickness',
-            'Insulin', 'Body mass index', 'Diabetes pedigree function', 'Age'],
+          r: [...patientRadarData, patientRadarData[0]],
+          theta:  closedLabels,
           //fill: 'toself',
           line: { color: ' #6c6fbe' },
           name: 'Patient Data'
@@ -167,7 +149,7 @@ export default {
           radialaxis: {
             visible: true,
             range: [0, 1],
-            tickvals: [0, 0.1, 0.4, 0.6, 0.8, 1],  // Custom tick values for better readability
+            tickvals: [0, 0.2, 0.4, 0.6, 0.8, 1],  // Custom tick values for better readability
           }
         },
         showlegend: true,
@@ -177,20 +159,22 @@ export default {
       };
 
       Plotly.newPlot('radar-chart', data, layout);
+
     },
     predict(row) {
-      if (row.glucose && row.age && row.bmi && row.insulin && row.bp && row.st && row.dpf && row.pregnancies) {
+      if (row.glucose && row.age && row.bmi && row.insulin && row.bp) {
         // Prepare the data to send in the request body
         const requestData = {
-          pregnancies: row.pregnancies,
+          pregnancies: this.constantPregnancies,
           glucose: row.glucose,
           bp: row.bp,
-          st: row.st,
+          st: this.constantST,
           insulin: row.insulin,
           bmi: row.bmi,
-          dpf: row.dpf,
+          dpf: this.constantDPF,
           age: row.age
         };
+        console.log('Request Data:', requestData);
 
         // Send a POST request to the Flask API
         fetch('http://127.0.0.1:5000/predict', {
@@ -208,9 +192,17 @@ export default {
               } else {
                 row.prediction = 'No prediction available';
               }
+              console.log('Response Data:', data.normalized);
+              console.log('Response Data Type:', typeof data.normalized);
               if (data.normalized){
-                const radarValues = data.normalized.split(',').map(Number);  // Convert to an array of numbers
+                const rawValues = data.normalized.split(',');
+                console.log('Raw Values:', rawValues);
+
+                const radarValues = data.normalized.split(',').map(Number); // Convert each item to a number
+
+                console.log('Cleaned Radar Values:', radarValues);
                 this.drawRadarChart(radarValues);  // Re-render the chart with the updated data
+
               }else {
                 this.drawRadarChart();  // Re-render the chart with default data
               }
@@ -244,11 +236,16 @@ export default {
   margin-bottom: 20px;
 }
 .dashboard-header h2 {
-  font-size: 24px;
+  font-size: 34px;
   font-weight: 500;
   margin: 0;
 }
-
-
+::v-deep(.v-data-table-header__content) {
+  font-size: 20px !important;
+  margin-top: 10px !important;
+}
+::v-deep(.v-field) {
+  font-size: 20px !important;
+  margin-top: 10px !important;
+}
 </style>
-
