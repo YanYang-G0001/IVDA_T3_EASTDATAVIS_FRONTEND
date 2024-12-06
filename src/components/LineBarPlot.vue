@@ -313,20 +313,24 @@ export default {
   font-size: 24px !important; /* 修改下拉框输入字体 */
   margin-top: 10px !important;
 }
+
 ::v-deep(.v-label) {
   font-size: 20px !important; /* 修改整体字段字体大小 */
 }
-::v-deep(.v-list-item) {
-  font-size: 24px !important; /* 修改下拉框输入字体 */
-  margin-top: 10px !important;
-}
-::v-deep(.v-filed__loader) {
+::v-deep(.v-field) {
   font-size: 20px !important; /* 修改整体字段字体大小 */
 }
-
-
-.v-menu .v-btn {
-  font-size: 16px;  /* Set the font size for the button */
+::v-deep(.v-list-item__title) {
+  font-size: 20px !important;
 }
+::v-deep(.v-field, .v-list-item-title) {
+  font-size: 20px !important;
+}
+::v-deep(.v-field.v-field--active.v-field--variant-filled) {
+  font-size: 20px !important;
+  }
+::v-deep(.v-overlay-container .v-list-item) {
+    font-size: 24px !important; /* 设置字体大小 */
+  }
 
 </style>

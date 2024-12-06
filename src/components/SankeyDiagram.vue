@@ -114,6 +114,23 @@
           </button>
         </div>
       </div>
+
+      <div style="margin-bottom: 20px; padding: 10px; border-radius: 5px; background-color: #f9f9f9;text-align: center;">
+        <div style="display: flex; gap: 15px;flex-direction: row;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 24px; height: 24px; background-color: #0b6e39; border-radius: 3px;"></div>
+            <span style="font-size: 24px; color: #333;">Low Risk</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 24px; height: 24px; background-color: #ea9213; border-radius: 3px;"></div>
+            <span style="font-size: 24px; color: #333;">Moderate Risk</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 24px; height: 24px; background-color: #aa0404; border-radius: 3px;"></div>
+            <span style="font-size: 24px; color: #333;">High Risk</span>
+          </div>
+        </div>
+      </div>
       <div id="sankey" style="width: 100%; height: 800px; background-color: transparent; border-radius: 1px;"></div>
     </div>
   </div>
@@ -170,6 +187,20 @@ export default {
       fetch("http://127.0.0.1:5000/api/filter-options")
           .then((response) => response.json())
           .then((data) => {
+            // Sort options for each filter node
+            this.filterOptions = Object.fromEntries(
+                Object.entries(data).map(([key, options]) => {
+                  // Sort the options based on their numerical ranges
+                  const sortedOptions = options.sort((a, b) => {
+                    const getMinValue = (str) => {
+                      const match = str.match(/(\d+)/);
+                      return match ? parseInt(match[0], 10) : Infinity; // Fallback for non-numerical values
+                    };
+                    return getMinValue(a) - getMinValue(b);
+                  });
+                  return [key, sortedOptions];
+                })
+            );
             this.filterOptions = data;
             this.selectedFilters = Object.fromEntries(
                 Object.keys(data).map((key) => [key, []])
