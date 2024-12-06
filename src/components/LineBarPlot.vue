@@ -309,11 +309,11 @@ export default {
   font-weight: 500;
   margin: 0;
 }
+::v-deep(.v-label) {
+  font-size: 25px !important; /* 修改整体字段字体大小 */
+}
 ::v-deep(.v-field__input) {
   font-size: 34px !important; /* 修改下拉框输入字体 */
   margin-top: 10px !important;
-}
-::v-deep(.v-label) {
-  font-size: 25px !important; /* 修改整体字段字体大小 */
 }
 </style>
