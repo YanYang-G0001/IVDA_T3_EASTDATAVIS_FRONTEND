@@ -1,5 +1,5 @@
 {
-  "name": "ivda_a1",
+  "name": "Diabetes_Analysis_EastDataVIZ",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,6 +12,7 @@
     "axios": "^1.7.7",
     "chart.js": "^4.4.6",
     "core-js": "^3.8.3",
+    "d3": "^7.9.0",
     "plotly.js": "^2.35.2",
     "roboto-fontface": "*",
     "vue": "^3.2.13",
